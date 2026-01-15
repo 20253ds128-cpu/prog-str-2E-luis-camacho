@@ -1,5 +1,4 @@
 
-import java.sql.SQLOutput;
 import java.util.Scanner;
 public class Main {
     public static int opcion = 0;
