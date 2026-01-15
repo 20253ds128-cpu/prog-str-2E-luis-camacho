@@ -1,7 +1,6 @@
-
 public class Main {
     static void main(String[] args) {
         System.out.println("Semana 2");
-        System.out.println("Versión base");
+        System.out.println("Version base");
     }
 }
