@@ -1,7 +1,6 @@
-
 import java.util.Scanner;
 
-public class Main {
+public class CalculadoraJavadocs {
 
     public static int opcion = 0;
 
@@ -55,7 +54,7 @@ public class Main {
 
             System.out.println();
 
-        } while (opcion < 5 && opcion > 0);
+        } while (opcion != 5);
 
         sc.close();
     }
