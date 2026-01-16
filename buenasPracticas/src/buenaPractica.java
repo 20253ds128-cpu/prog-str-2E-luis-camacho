@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Main {
+public class buenaPractica {
 
     public static double IVA = 0.16;
     public static double UMBRAL_DESCUENTO = 1000;
