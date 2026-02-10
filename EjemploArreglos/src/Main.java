@@ -1,15 +1,33 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        Persona[] personas = new Persona[3];
+
+        Persona persona1 = new Persona();
+        Persona persona2 = new Persona(2, "David");
+        Persona persona3 = new Persona(3, "René");
+
+        personas [0] = persona1;
+        personas [1] = persona2;
+        personas [2] = persona3;
+
+        personas[0] = null;
+        for (Persona persona : personas) {
+            try {
+                System.out.println("------------");
+                System.out.println(persona.getId());
+                System.out.println(persona.getName());
+                System.out.println(persona.getisActive());
+                System.out.println(persona);
+            } catch (Exception a) {
+                System.out.println("Hay un null");
+            }
+
+
+
+
         }
     }
 }
