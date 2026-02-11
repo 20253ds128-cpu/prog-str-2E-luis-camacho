@@ -1,39 +1,54 @@
-
 import java.util.Scanner;
 
 public class App {
+
     public static void main(String[] args) {
 
-        int opc;
         Scanner sc = new Scanner(System.in);
+        InputValidator iv = new InputValidator(sc);
+        PersonaService service = new PersonaService();
 
-        Persona [] personas = new Persona[3];
-        InputValidator inputValidator = new InputValidator();
+        int opcion;
 
         do {
-            System.out.println("Menú");
-            System.out.println("1. Alta");
-            System.out.println("2. Buscar por ID (solo activas)");
-            System.out.println("3. Baja lógica por ID");
-            System.out.println("4. Listar activas");
-            System.out.println("5. Actualizar nombre por ID (solo activas)");
-            System.out.println("0. Salir");
-            opc = sc.nextInt();
+            mostrarMenu();
+            opcion = iv.leerOpcionMenu();
 
-            switch (opc) {
+            switch (opcion) {
                 case 1:
-                    int id = inputValidator.validarId("Ingresa el ID:", sc);
+                    service.alta(iv);
                     break;
                 case 2:
-
+                    service.buscar(iv);
+                    break;
                 case 3:
-
+                    service.baja(iv);
+                    break;
                 case 4:
-
+                    service.listarActivas();
+                    break;
                 case 5:
+                    service.actualizar(iv);
+                    break;
+                case 0:
+                    System.out.println("Saliendo...");
+                    break;
+                default:
+                    System.out.println("Opcion invalida, intenta otra vez.");
             }
 
-        } while (opc != 0);
+        } while (opcion != 0);
 
+        sc.close();
+    }
+
+    public static void mostrarMenu() {
+        System.out.println("\n--- MENU ---");
+        System.out.println("1) Alta");
+        System.out.println("2) Buscar por ID (solo activas)");
+        System.out.println("3) Baja logica por ID");
+        System.out.println("4) Listar activas");
+        System.out.println("5) Actualizar nombre por ID");
+        System.out.println("0) Salir");
     }
 }
