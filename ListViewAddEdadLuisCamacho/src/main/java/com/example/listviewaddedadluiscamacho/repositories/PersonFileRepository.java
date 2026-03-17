@@ -30,5 +30,11 @@ public class PersonFileRepository {
                 StandardOpenOption.APPEND);
     }
 
+    public void saveFile(List<String> lines) throws IOException {
+        ensureFile();
+        Files.write(filePath, lines, StandardCharsets.UTF_8,
+                StandardOpenOption.TRUNCATE_EXISTING);
+    }
+
 
 }
