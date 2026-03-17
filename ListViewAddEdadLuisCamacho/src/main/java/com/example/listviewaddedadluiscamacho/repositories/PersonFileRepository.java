@@ -21,6 +21,7 @@ public class PersonFileRepository {
 
 
     public List<String> readAllLines() throws IOException {
+        ensureFile();
         return Files.readAllLines(filePath);
     }
 
