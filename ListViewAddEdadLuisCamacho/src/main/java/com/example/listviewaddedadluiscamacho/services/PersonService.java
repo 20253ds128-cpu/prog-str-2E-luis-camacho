@@ -25,14 +25,57 @@ public class PersonService {
             String name = parts[0];
             String email = parts[1];
             String edad = parts [2];
-            result.add("Nombre: " + name + " - " + email + " - " + edad);
+            result.add(name + " - " + email + " - " + edad);
         }
 
         return result;
 
     }
 
-    public void addPerson(String name, String email, String edad) throws IOException {
+    public void updatePerson(int index, String name, String email, String edad) throws IOException {
+
+        validate(name, email, edad);
+
+        List<String> lines = repo.readAllLines();
+
+        if (index < 0 || index >= lines.size()) {
+            throw new IllegalArgumentException("El índice es inválido.");
+
+        }
+
+
+        lines.set(index, name + "," + email + "," + edad);
+
+        repo.saveFile(lines);
+
+    }
+
+    public void deletePerson(int index, String name, String email, String edad) throws IOException {
+
+        List<String> data = repo.readAllLines();
+
+        if (index < 0 || index >= data.size()) {
+            throw new IllegalArgumentException("El índice es inválido.");
+
+        }
+
+        data.remove(index);
+        repo.saveFile(data);
+    }
+
+    private List<String> getCleanLines() throws IOException {
+        List<String> lines = repo.readAllLines();
+        List<String> cleanLines = new ArrayList<>();
+
+        for (String line : lines) {
+            if (line == null && !line.isBlank()) {
+                cleanLines.add(line);
+            }
+        }
+        return cleanLines;
+    }
+
+    public void addPerson(int index, String name, String email, String edad) throws IOException {
         validate(name, email, edad);
         repo.appendNewLine(name + "," + email + "," + edad);
 
@@ -51,7 +94,7 @@ public class PersonService {
 
         try {
             int newNumber = Integer.parseInt(edad);
-            if (newNumber < 18 || newNumber > 120) {
+            if (newNumber < 18) {
                 throw new IllegalArgumentException(": Edad inválida");
             }
         } catch (NumberFormatException e) {
