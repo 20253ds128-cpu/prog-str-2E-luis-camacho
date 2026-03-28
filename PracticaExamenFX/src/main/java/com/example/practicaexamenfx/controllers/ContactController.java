@@ -2,72 +2,127 @@ package com.example.practicaexamenfx.controllers;
 
 import com.example.practicaexamenfx.model.Contacto;
 import com.example.practicaexamenfx.services.ContactService;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
-import java.util.ArrayList;
-import java.util.List;
-
-private ContactService service = new ContactService();
-
 public class ContactController {
 
-    private String[] arrParentescos = {
-            "Padre",
-            "Madre",
-            "Hermano",
-            "Hermana",
-            "Abuelo",
-            "Abuela",
-            "Tio",
-            "Tia"
-    };
-
+    @FXML
+    private TextField txtNombre;
 
     @FXML
-    private TextField txtName;
-
-    @FXML
-    private TextField txtTel;
-
-    @FXML
-    private ListView<Contacto> listObservableContacts = FXCollections.observableArrayList();
-    private List<Contacto> listContacts = new ArrayList<>();
+    private TextField txtTelefono;
 
     @FXML
     private ComboBox<String> cbParentesco;
-    private ObservableList<String> listObservableParent = FXCollections.observableArrayList();
-    private ObservableList<String> ObservableParent;
+
+    @FXML
+    private ListView<String> listViewContactos;
 
     private ContactService service = new ContactService();
 
+    private String[] parentescos = {
+            "Padre", "Madre", "Hermano", "Hermana",
+            "Abuelo", "Abuela", "Tío", "Tía"
+    };
+
     @FXML
-    public void initialize () {
-        listObservableParent.setAll(arrParentescos);
-        cbParentesco.setItems(ObservableParent);
-        
+    public void initialize() {
+        cbParentesco.getItems().addAll(parentescos);
     }
 
     @FXML
     public void onAddContact() {
-        String name = txtName.getText().trim();
-        String tel = txtTel.getText().trim();
-
+        String nombre = txtNombre.getText();
+        String tel = txtTelefono.getText();
         String parent = cbParentesco.getValue();
 
-        Contacto contact = new Contacto(name,tel,parent);
-        service.addContacts(contact);
+        if (nombre.isEmpty() || tel.isEmpty() || parent == null) {
+            System.out.println("Campos obligatorios");
+            return;
+        }
 
-        listObservableContacts.setAll(service.getAllContacts());
+        if (tel.length() != 10) {
+            System.out.println("Teléfono inválido");
+            return;
+        }
 
+        if (service.buscarPorNombre(nombre) != null) {
+            System.out.println("Ya existe");
+            return;
+        }
 
-        System.out.println(service.getAllContacts());
+        Contacto c = new Contacto(nombre, tel, parent);
+        service.addContacts(c);
 
-
+        actualizarLista();
+        limpiar();
     }
 
+    @FXML
+    public void onBuscar() {
+        String nombre = txtNombre.getText();
+
+        Contacto c = service.buscarPorNombre(nombre);
+
+        if (c == null) {
+            System.out.println("No encontrado");
+            return;
+        }
+
+        txtTelefono.setText(c.getTel());
+        cbParentesco.setValue(c.getParent());
+    }
+
+    @FXML
+    public void onActualizar() {
+        String nombre = txtNombre.getText();
+        String tel = txtTelefono.getText();
+        String parent = cbParentesco.getValue();
+
+        String res = service.actualizarContacto(nombre, tel, parent);
+
+        if (res != null) {
+            System.out.println(res);
+        } else {
+            actualizarLista();
+        }
+    }
+
+    @FXML
+    public void onEliminar() {
+        String nombre = txtNombre.getText();
+
+        String res = service.eliminarContacto(nombre);
+
+        if (res != null) {
+            System.out.println(res);
+        } else {
+            actualizarLista();
+            limpiar();
+        }
+    }
+
+    @FXML
+    public void onLimpiar() {
+        limpiar();
+    }
+
+    private void limpiar() {
+        txtNombre.clear();
+        txtTelefono.clear();
+        cbParentesco.setValue(null);
+    }
+
+    private void actualizarLista() {
+        listViewContactos.getItems().clear();
+
+        for (Contacto c : service.getAllContacts()) {
+            listViewContactos.getItems().add(
+                    c.getName() + " - " + c.getTel() + " - " + c.getParent()
+            );
+        }
+    }
 }

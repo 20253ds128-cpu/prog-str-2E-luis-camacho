@@ -14,7 +14,39 @@ public class ContactService {
     }
 
     public void addContacts(Contacto contacto) {
-        listContacto.add(contacto);
+        listContacts.add(contacto);
     }
 
+    public Contacto buscarPorNombre(String nombre) {
+        for (Contacto c : listContacts) {
+            if (c.getName().equalsIgnoreCase(nombre)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public String actualizarContacto(String nombre, String tel, String parent) {
+        Contacto c = buscarPorNombre(nombre);
+
+        if (c == null) {
+            return "No encontrado";
+        }
+
+        c.setTel(tel);
+        c.setParent(parent);
+
+        return null;
+    }
+
+    public String eliminarContacto(String nombre) {
+        Contacto c = buscarPorNombre(nombre);
+
+        if (c == null) {
+            return "No encontrado";
+        }
+
+        listContacts.remove(c);
+        return null;
+    }
 }
